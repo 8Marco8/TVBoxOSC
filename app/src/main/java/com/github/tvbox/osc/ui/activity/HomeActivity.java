@@ -402,8 +402,10 @@ public class HomeActivity extends BaseActivity {
         BaseLazyFragment baseLazyFragment = this.fragments.get(i);
         if (baseLazyFragment instanceof GridFragment) {
             View view = this.sortFocusView;
-			GridFragment grid = (GridFragment)baseLazyFragment;
-            if(grid.restoreView() ){ return; }// 还原上次保存的UI内容
+			GridFragment grid = (GridFragment) baseLazyFragment;
+            if (grid.restoreView() ){
+                return;
+            }// 还原上次保存的UI内容
             if (view != null && !view.isFocused()) {
                 this.sortFocusView.requestFocus();
             } else if (this.sortFocused != 0) {
@@ -569,7 +571,7 @@ public class HomeActivity extends BaseActivity {
                 @Override
                 public void click(SourceBean value, int pos) {
                     ApiConfig.get().setSourceBean(value);
-                    Intent intent =new Intent(getApplicationContext(), HomeActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("useCache", true);
@@ -599,7 +601,7 @@ public class HomeActivity extends BaseActivity {
 //                        Intent intent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplication().getPackageName());
 //                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
 //                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                        Intent intent =new Intent(getApplicationContext(), HomeActivity.class);
+//                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
 //                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                        Bundle bundle = new Bundle();
 //                        bundle.putBoolean("useCache", true);
