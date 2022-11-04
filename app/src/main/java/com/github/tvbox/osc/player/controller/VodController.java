@@ -108,7 +108,9 @@ public class VodController extends BaseController {
     
     Handler myHandle;
     Runnable myRunnable;
-    int myHandleSeconds = 8000;//闲置8秒关闭底栏    
+    int myHandleSeconds = 8000;//闲置8秒关闭底栏
+
+    int videoPlayState = 0;
 
     @Override
     protected void initView() {
@@ -255,6 +257,7 @@ public class VodController extends BaseController {
                     mPlayerConfig.put("sp", speed);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
+                    speed_old = speed;
                     mControlWrapper.setSpeed(speed);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -269,6 +272,7 @@ public class VodController extends BaseController {
                     mPlayerConfig.put("sp", 1.0f);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
+                    speed_old = 1.0f;
                     mControlWrapper.setSpeed(1.0f);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -451,7 +455,7 @@ public class VodController extends BaseController {
         initLandscapePortraitBtnInfo();
     }
 
-    void initLandscapePortraitBtnInfo() {
+    public void initLandscapePortraitBtnInfo() {
         double screenSqrt = ScreenUtils.getSqrt(mActivity);
         if (screenSqrt < 20.0) {
             mLandscapePortraitBtn.setVisibility(View.VISIBLE);
@@ -619,6 +623,7 @@ public class VodController extends BaseController {
     @Override
     protected void onPlayStateChanged(int playState) {
         super.onPlayStateChanged(playState);
+        videoPlayState = playState;
         switch (playState) {
             case VideoView.STATE_IDLE:
                 break;
@@ -696,6 +701,46 @@ public class VodController extends BaseController {
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    private boolean fromLongPress;
+    private float speed_old = 1.0f;
+    @Override
+    public void onLongPress(MotionEvent e) {
+        if (videoPlayState!=VideoView.STATE_PAUSED) {
+            fromLongPress = true;
+            try {
+                speed_old = (float) mPlayerConfig.getDouble("sp");
+                float speed = 3.0f;
+                mPlayerConfig.put("sp", speed);
+                updatePlayerCfgView();
+                mBottomRoot.setVisibility(VISIBLE);
+                listener.updatePlayerCfg();
+                mControlWrapper.setSpeed(speed);
+            } catch (JSONException f) {
+                f.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        if (e.getAction() == MotionEvent.ACTION_UP) {
+            if (fromLongPress) {
+                fromLongPress =false;
+                try {
+                    float speed = speed_old;
+                    mPlayerConfig.put("sp", speed);
+                    updatePlayerCfgView();
+                    mBottomRoot.setVisibility(GONE);
+                    listener.updatePlayerCfg();
+                    mControlWrapper.setSpeed(speed);
+                } catch (JSONException f) {
+                    f.printStackTrace();
+                }
+            }
+        }
+        return super.onTouchEvent(e);
     }
 
     @Override
