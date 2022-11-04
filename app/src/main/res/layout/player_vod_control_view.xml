@@ -223,19 +223,6 @@
                 android:textSize="@dimen/ts_24" />
 
             <TextView
-                android:id="@+id/play_time_step"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/vs_5"
-                android:layout_marginRight="@dimen/vs_5"
-                android:background="@drawable/button_dialog_main"
-                android:focusable="true"
-                android:padding="@dimen/vs_4"
-                android:text="1S"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/ts_24" />
-
-            <TextView
                 android:id="@+id/landscape_portrait"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
